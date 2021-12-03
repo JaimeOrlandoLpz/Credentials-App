@@ -50,28 +50,32 @@ const Login = (props) => {
     // Handle Password Value and Validity within the same state
   const [passwordState, dispatchPassword] = useReducer(passwordReducer, {value: '', isValid: false});
 
+  // Use ALIAS assignment to save email and password validity in variables
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
   // Side effect will be run at the end of the first component evaluation and whenever one of the three dependencies changes
-  // useEffect(()=>{
+  useEffect(()=>{
     
-  //    const identifier = setTimeout(()=>{
-  //     console.log("Validating Form");
-  //     setFormIsValid(
-  //       enteredEmail.includes('@') && enteredPassword.trim().length > 6
-  //     );
-  //   }, 500);
+     const identifier = setTimeout(()=>{
+      console.log("Validating Form");
+      setFormIsValid(
+        emailIsValid && passwordIsValid
+      );
+    }, 500);
 
-  //   return () => {
-  //     clearTimeout(identifier); //Clears timer every time the cleanup function executes
-  //     /* Cleanup function that will run whenever new side effects execute */
-  //     console.log("CLEANUP");
-  //   }
+    return () => {
+      clearTimeout(identifier); //Clears timer every time the cleanup function executes
+      /* Cleanup function that will run whenever new side effects execute */
+      console.log("CLEANUP");
+    }
 
-  // }, [enteredEmail, enteredPassword]);
+  }, [ emailIsValid, passwordIsValid ]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({type: 'USER_INPUT', val: event.target.value});
     
-    setFormIsValid(emailState.value.includes('@') && passwordState.value.trim().length > 6);
+    // setFormIsValid(emailState.value.includes('@') && passwordState.value.trim().length > 6);
 
   };
 
