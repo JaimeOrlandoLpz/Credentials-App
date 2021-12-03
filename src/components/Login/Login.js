@@ -13,9 +13,20 @@ const Login = (props) => {
 
   // Side effect will be run at the end of the first component evaluation and whenever one of the three dependencies changes
   useEffect(()=>{
-    setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6
-    );
+    
+     const identifier = setTimeout(()=>{
+      console.log("Validating Form");
+      setFormIsValid(
+        enteredEmail.includes('@') && enteredPassword.trim().length > 6
+      );
+    }, 500);
+
+    return () => {
+      clearTimeout(identifier); //Clears timer every time the cleanup function executes
+      /* Cleanup function that will run whenever new side effects execute */
+      console.log("CLEANUP");
+    }
+
   }, [enteredEmail, enteredPassword]);
 
   const emailChangeHandler = (event) => {
